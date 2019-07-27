@@ -21,6 +21,5 @@ def zip_and_category():
      category_input = request.form['category_input']
      return ()
 
-
 if __name__ == "__main__":
      app.run(debug=True, use_reloader=False)
