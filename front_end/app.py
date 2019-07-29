@@ -13,13 +13,13 @@ def data():
 @app.route('/cityInput', methods=['POST'])
 def cityInput():
      city_input = request.form['city_input']
-     return ()
+     return city_input
      
 @app.route('/zip_and_category', methods=['POST'])
 def zip_and_category():
      zip_code = request.form['zip_code']
      category_input = request.form['category_input']
-     return ()
+     return zip_code, category_input
 
 if __name__ == "__main__":
      app.run(debug=True, use_reloader=False)
