@@ -17,7 +17,7 @@ fetch('/hello')
           console.log(json); // Here’s our JSON object
      })
 
-// POST
+// POST (AJAX request)
 fetch('/hello', {
      method: 'POST',
      headers: {
@@ -33,3 +33,22 @@ fetch('/hello', {
      // Should be 'OK' if everything was successful
      console.log(text);
 });
+
+d3.select('#citysubmit').on("click", function(){
+     d3.event.preventDefault();
+     let inputElement = d3.select(".form-control")
+     let inputValue = inputElement.property("value");
+     fetch('/citytest', {
+          method: 'POST',
+          headers: {
+               'Content-Type': 'application/json'
+          },
+          body: JSON.stringify({inputValue})
+     }).then(function(response) {
+          return response.text();
+     }).then(function(text) {
+          console.log('POST response: ');
+          console.log(text);
+     })
+})
+

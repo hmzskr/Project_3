@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,46 +9,63 @@
 
      <!--favicon link-->
      <link rel="shortcut icon" type="image/png" href="../static/img/favicon.png" />
-     
+
      <!--bootstrap css-->
      <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-     
+
      <!--boostrap javascript-->
      <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"
           integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"
           crossorigin="anonymous"></script>
-     
+
      <!--d3 CDN-->
      <script src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
-     
+
      <!--leaflet css-->
      <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.3/dist/leaflet.css"
           integrity="sha512-Rksm5RenBEKSKFjgI3a41vrjkw4EVPlJ3+OiI65vTjIdo9brlAacEuKOiQ5OFh7cOI1bkDwLqdLw3Zg0cRJAAQ=="
           crossorigin="" />
-     
+
      <!--leaflet javascript-->
      <script src="https://unpkg.com/leaflet@1.3.3/dist/leaflet.js"
           integrity="sha512-tAGcCfR4Sc5ZP5ZoVz0quoZDYX5aCtEm/eu1KhSLj2c9eFrylXZknQYmxUssFaVJKvvc0dJQixhGjG2yXWiV9Q=="
           crossorigin=""></script>
-     
+
      <!--google font-->
      <link href="https://fonts.googleapis.com/css?family=Libre+Franklin&display=swap" rel="stylesheet">
-     
+
      <!--local css file-->
      <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css')}}">
 
 </head>
+
 <body>
+     <div class="container">
+          <div class="container-fluid-nav text-center">
+               <nav class="navbar bg-dark">
+                    <span class="navbar-brand mb-0 text-white">Yelp Machine Learning Thing</span>
+               </nav>
+          </div>
+     </div>
+     <div class="container">
+          <form>
+               <div class="form-group">
+                    <label for="cityinput"></label>
+                    <input type="text" class="form-control" id="cityinput" placeholder="Enter City Name Here">
+                    <button type="submit" id="citysubmit" class="btn btn-primary">Submit</button>
+               </div>
+          </form>
+     </div>
 
-     
-<!--jQuery CDN-->
-<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-     integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-     crossorigin="anonymous"></script>
+     <!--jQuery CDN-->
+     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
 
-<!--local JS dependencies-->
-<!-- <script src="{{ url_for('static', filename='js/config.js') }}"></script> -->
-<script src="{{ url_for('static', filename='js/app.js') }}"></script>
+     <!--local JS dependencies-->
+     <!-- <script src="{{ url_for('static', filename='js/config.js') }}"></script> -->
+     <script src="{{ url_for('static', filename='js/app.js') }}"></script>
 </body>
+
 </html>
