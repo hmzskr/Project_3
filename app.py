@@ -101,8 +101,8 @@ def citytest():
     print("Number of items in list: ", len(new_cat_list))
     print(price_list)
 
-    return jsonify(new_cat_list, new_zip_list) 
-
+    return jsonify(new_cat_list, new_zip_list)
+    
 @app.route('/')
 def index():
     # look inside `templates` and serve `index.html`

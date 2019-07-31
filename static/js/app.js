@@ -35,10 +35,10 @@ fetch('/hello', {
 });
 
 // event handler for the city submit button
-d3.select('#citysubmit').on('click', citySelect)
+d3.select('#citysubmit').on('click', cityAndOptions)
 
 // fetch function to post city input & return category list & zipcodes via flask from the Yelp API
-function citySelect() {
+function cityAndOptions() {
      
      d3.event.preventDefault();
      
@@ -56,20 +56,35 @@ function citySelect() {
      
      // awaits result from Yelp API and converts it to JSON (normally returns as an array)
      }).then(function (response) {          
-          let catList = response.json()
-          return catList          
+          let optionsList = response.json()
+          return optionsList          
      
      // callback function once result is returned to generate category list for multi-select options
-     }).then(function (catList) {
+     }).then(function (optionsList) {
           console.log('POST response: ');
-          console.log(catList);
-          let output = '';
-          for (i=0; i < catList.length; i++) {
-               output += `<li>${catList[i]}</li>`
+
+          // vars to split the optionsList returned into separate arrays for categories & zip codes
+          let categoryList = optionsList[0] 
+          let zipCodeList = optionsList[1]                   
+
+          // sets vars to empty arrays to build selection lists
+          let categoryOutput = '';
+          let zipCodeOutput = '';
+
+          // loop to build category list and append to DOM
+          for (i=0; i < categoryList.length; i++) {
+               categoryOutput += `<li>${categoryList[i]}</li>`
           }     
-          document.getElementById('select-options').innerHTML = output;
+          document.getElementById('select-options').innerHTML = categoryOutput;
+          
+          // loop to build zip code list and append to DOM
+          for (i=0; i < zipCodeList.length; i++) {
+               zipCodeOutput += `<li>${zipCodeList[i]}</li>`
+          }
+          document.getElementById('zip-codes').innerHTML = zipCodeOutput;
      })
+     // catch any errors that result from the Yelp API call
      .catch(function(err) {
-          console.log(err)
+          document.getElementById('select-options').innerHTML = `<p>Yelp's API had a brainfart. Reload the page & try again!</p>`;
      })
 }
