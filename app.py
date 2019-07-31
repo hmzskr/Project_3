@@ -1,5 +1,9 @@
 # app.py
 from flask import Flask, jsonify, request, render_template
+import pandas as pd
+import numpy as np
+import requests
+import time
 
 app = Flask(__name__)
 
@@ -16,17 +20,12 @@ def hello():
         message = {'greeting':'Hello from Flask!'}
         return jsonify(message)  # serialize and use JSON headers
 
-@app.route('/citytest', methods=['POST'])
+@app.route('/citytest', methods=['GET', 'POST'])
 def citytest():
     response = request.get_json()
     for i in response:
         city = response[i]
-        print(city)
-    
-    import pandas as pd
-    import numpy as np
-    import requests
-    import time
+        print(city)  
 
     pd.options.display.max_rows = 999
     pd.options.display.max_columns = 999
@@ -58,11 +57,11 @@ def citytest():
     restaurant_count = 0
 
     for offset in range(0, 1000, 20):
-    #         print(f'Retrieving restaurants in {city}')
-        yelp_params = {'location' : city, 'term': 'restaurants', 'limit' : '20', 'offset' : offset}
+    # print(f'Retrieving restaurants in {city}')
+        yelp_params = {'location': city, 'term': 'restaurants', 'limit': '20', 'offset': offset}
         yelp_response = requests.get(yelp_url, yelp_params, headers = yelp_headers)
         yelp_data = yelp_response.json()
-    #         print(yelp_data)
+    # print(yelp_data)
         restaurant_data = yelp_data['businesses']
 
         for restaurant in restaurant_data:
@@ -97,11 +96,14 @@ def citytest():
             
                 
     print("--- %s seconds ---" % (time.time() - start_time))
+    new_cat_list = list(set(categories_list))
+    print(new_cat_list)
+    print("Number of items in list: ", len(new_cat_list))
 
-    return 'Got it', 200     
+    return jsonify(new_cat_list)     
 
-@app.route('/test')
-def test_page():
+@app.route('/')
+def index():
     # look inside `templates` and serve `index.html`
     return render_template('index.html')
 

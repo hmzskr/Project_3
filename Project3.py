@@ -40,7 +40,7 @@ restaurant_count = 0
 
 for offset in range(0, 1000, 20):
 #         print(f'Retrieving restaurants in {city}')
-    yelp_params = {'location' : city, 'term': 'restaurants', 'limit' : '20', 'offset' : offset}
+    yelp_params = {'location': city, 'term': 'restaurants', 'limit' : '20', 'offset' : offset}
     yelp_response = requests.get(yelp_url, yelp_params, headers = yelp_headers)
     yelp_data = yelp_response.json()
 #         print(yelp_data)
@@ -79,26 +79,19 @@ for offset in range(0, 1000, 20):
             
 print("--- %s seconds ---" % (time.time() - start_time))               
 
-
 # In[4]:
 
-
-# restaurants_df = pd.DataFrame({'ID' : id_list, 'Name' : name_list, 'Is_Closed' : is_closed_list,                               'Review_Count' : review_count_list, 'Categories_All' : categories_all_list,                               'Categories' : categories_list, 'Rating' : rating_list, 'Latitude' : latitude_list,                               'Rating' : rating_list, 'Latitude' : latitude_list, 'Longitude' : longitude_list,                               'Price' : price_list, 'Address' : address_list, 'City' : city_list,                               'Zip_Code' : zip_code_list, 'State' : state_list})
-
-# restaurants_df.drop_duplicates(keep = False, inplace = True)
-# restaurants_df.dropna(subset = ['Address'], inplace = True)
-# restaurants_df.dropna(subset = ['Price'], inplace = True)
-
-# restaurants_df = restaurants_df[restaurants_df.Price != '']
-# restaurants_df['Price'].replace({'$$$$$' : 5, '$$$$' : 4, '$$$' : 3, '$$' : 2, '$' : 1}, inplace = True)
-# restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
-
-# restaurants_df['Categories'].replace(['American (New)', 'American (Traditional)'], 'American', inplace = True)
-# restaurants_df['Categories'].replace(['New Mexican Cuisine'], 'Mexican', inplace = True)
-
+restaurants_df = pd.DataFrame({'ID': id_list, 'Name': name_list, 'Is_Closed': is_closed_list, 'Review_Count': review_count_list, 'Categories_All': categories_all_list, 'Categories': categories_list, 'Rating': rating_list, 'Latitude': latitude_list, 'Rating': rating_list, 'Latitude': latitude_list, 'Longitude': longitude_list, 'Price' : price_list, 'Address': address_list, 'City': city_list, 'Zip_Code' : zip_code_list, 'State': state_list})
+restaurants_df.drop_duplicates(keep = False, inplace = True)
+restaurants_df.dropna(subset = ['Address'], inplace = True)
+restaurants_df.dropna(subset = ['Price'], inplace = True)
+restaurants_df = restaurants_df[restaurants_df.Price != '']
+restaurants_df['Price'].replace({'$$$$$': 5, '$$$$': 4, '$$$': 3, '$$': 2, '$': 1}, inplace = True)
+restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
+restaurants_df['Categories'].replace(['American (New)', 'American (Traditional)'], 'American', inplace = True)
+restaurants_df['Categories'].replace(['New Mexican Cuisine'], 'Mexican', inplace = True)
 
 # # In[5]:
-
 
 # restaurants_df.count()
 
