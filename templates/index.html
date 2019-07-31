@@ -7,6 +7,11 @@
      <meta http-equiv="X-UA-Compatible" content="ie=edge">
      <title>Document</title>
 
+     <!--jQuery CDN-->
+     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+          crossorigin="anonymous"></script>
+
      <!--favicon link-->
      <link rel="shortcut icon" type="image/png" href="../static/img/favicon.png" />
 
@@ -52,16 +57,13 @@
           <form>
                <div class="form-group">
                     <label for="cityinput"></label>
-                    <input type="text" class="form-control mb-3" id="cityinput" placeholder="Enter City Name Here">
+                    <input type="text" class="form-control mb-3" id="cityinput" placeholder="Enter City & State Here (ie, Los Angeles, CA)">
                     <button type="submit" id="citysubmit" class="btn btn-primary">Submit</button>
                </div>
           </form>
      </div>
 
-     <!--jQuery CDN-->
-     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
-          integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
-          crossorigin="anonymous"></script>
+     
 
      <!--local JS dependencies-->
      <!-- <script src="{{ url_for('static', filename='js/config.js') }}"></script> -->

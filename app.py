@@ -97,8 +97,8 @@ def citytest():
                 
     print("--- %s seconds ---" % (time.time() - start_time))
     new_cat_list = list(set(categories_list))
-    print(new_cat_list)
     print("Number of items in list: ", len(new_cat_list))
+    print(price_list)
 
     return jsonify(new_cat_list)     
 
