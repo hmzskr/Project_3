@@ -38,8 +38,7 @@ fetch('/hello', {
 d3.select('#citysubmit').on('click', cityAndOptions)
 
 // fetch function to post city input & return category list & zipcodes via flask from the Yelp API
-function cityAndOptions() {
-     
+function cityAndOptions() {     
      d3.event.preventDefault();
      
      // converts city input to variable
@@ -67,13 +66,15 @@ function cityAndOptions() {
           let categoryList = optionsList[0] 
           let zipCodeList = optionsList[1]                   
 
+          // sorts categories alphabetically & zipcodes numerically in their respective elements
           categoryList = categoryList.sort()
           zipCodeList = zipCodeList.sort()
+
           // sets vars to empty arrays to build selection lists
           let categoryOutput = '';
           let zipCodeOutput = '';
 
-          // loop to build category list and append to DOM
+          // loop to build category list, set element attributes and append to DOM
           let categorySelect = document.createElement('select');
           categorySelect.setAttribute("id", "select-category")
           categorySelect.setAttribute("multiple", "multiple")
@@ -85,7 +86,7 @@ function cityAndOptions() {
                document.getElementById('select-category').appendChild(optionEntry)
           }         
           
-          // loop to build zip code list and append to DOM
+          // loop to build zip code list, set element attributes and append to DOM
           let zipSelect = document.createElement('select');
           zipSelect.setAttribute("id", "select-zip")          
           document.getElementById('zip-options').appendChild(zipSelect)
@@ -99,7 +100,7 @@ function cityAndOptions() {
           // array of Yelp price points
           const priceArray = [1, 2, 3, 4]
 
-          // loop to build price point list and append to DOM
+          // loop to build price point list, set element attributes and append to DOM
           let priceSelect = document.createElement('select')
           priceSelect.setAttribute("id", "select-price")
           document.getElementById('price-options').appendChild(priceSelect)
@@ -110,7 +111,7 @@ function cityAndOptions() {
                document.getElementById('select-price').appendChild(priceOption)
           }
 
-          // add button to submit options
+          // add button to submit user selected options
           let optionsButton = document.createElement('button')
           optionsButton.setAttribute("class", "btn btn-secondary")
           optionsButton.setAttribute("id", "optionssubmit")
@@ -124,8 +125,11 @@ function cityAndOptions() {
      })
 }
 
+// fetch function to send user selected options to python and return machine learning result
 function sendOptions() {
      event.preventDefault();
+
+     // convert selected options to their respective values via jQuery
      let catSelect = $('#select-category').val()
      let zipSelect = $('#select-zip').val()
      let priceSelect = $('#select-price').val()
