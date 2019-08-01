@@ -102,7 +102,16 @@ def citytest():
     print(price_list)
 
     return jsonify(new_cat_list, new_zip_list)
-    
+
+@app.route('/useroptions', methods=['GET', 'POST'])
+def useroptions():
+    response = request.get_json()
+    print(response)
+    options=response[0]
+    for i in options:
+        print(i)
+    return jsonify(response)
+        
 @app.route('/')
 def index():
     # look inside `templates` and serve `index.html`

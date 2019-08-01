@@ -109,9 +109,39 @@ function cityAndOptions() {
                priceOption.appendChild(priceText)
                document.getElementById('select-price').appendChild(priceOption)
           }
+
+          // add button to submit options
+          let optionsButton = document.createElement('button')
+          optionsButton.setAttribute("class", "btn btn-secondary")
+          optionsButton.setAttribute("id", "optionssubmit")
+          optionsButton.setAttribute("onclick","sendOptions()")
+          optionsButton.innerHTML = "Submit"
+          document.getElementById('options-button').appendChild(optionsButton)
      })
      // catch any errors that result from the Yelp API call
      .catch(function(err) {
           document.getElementById('select-options').innerHTML = `<p>Yelp's API had a brainfart. Reload the page & try again!</p>`;
      })
 }
+
+function sendOptions() {
+     event.preventDefault();
+     let catSelect = $('#select-category').val()
+     let zipSelect = $('#select-zip').val()
+     let priceSelect = $('#select-price').val()
+     fetch('/useroptions', {
+          method: 'POST',
+          headers: {
+               'Content-Type': 'application/json'
+          },
+          body: JSON.stringify([ catSelect, zipSelect, priceSelect ])
+     }).then(function(response) {
+          let optionsResponse = response.json()
+          return optionsResponse
+     }).then(function(optionsResponse) {
+          console.log('Options result: ')
+          console.log(optionsResponse)
+     })
+     
+}
+
