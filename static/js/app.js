@@ -74,16 +74,26 @@ function cityAndOptions() {
           let zipCodeOutput = '';
 
           // loop to build category list and append to DOM
+          let categorySelect = document.createElement('select');
+          categorySelect.setAttribute("id", "select-category")
+          document.getElementById('select-options').appendChild(categorySelect);
           for (i=0; i < categoryList.length; i++) {
-               categoryOutput += `<li>${categoryList[i]}</li>`
-          }     
-          document.getElementById('select-options').innerHTML = categoryOutput;
+               let optionEntry = document.createElement('option');
+               let optionText = document.createTextNode(categoryList[i])
+               optionEntry.appendChild(optionText)
+               document.getElementById('select-category').appendChild(optionEntry)
+          }         
           
           // loop to build zip code list and append to DOM
+          let zipSelect = document.createElement('select');
+          zipSelect.setAttribute("id", "select-zip")
+          document.getElementById('zip-options').appendChild(zipSelect)
           for (i=0; i < zipCodeList.length; i++) {
-               zipCodeOutput += `<li>${zipCodeList[i]}</li>`
+               let zipOption = document.createElement('option');
+               let zipText = document.createTextNode(zipCodeList[i])
+               zipOption.appendChild(zipText)
+               document.getElementById('select-zip').appendChild(zipOption)
           }
-          document.getElementById('zip-codes').innerHTML = zipCodeOutput;
      })
      // catch any errors that result from the Yelp API call
      .catch(function(err) {
