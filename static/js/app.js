@@ -76,6 +76,7 @@ function cityAndOptions() {
           // loop to build category list and append to DOM
           let categorySelect = document.createElement('select');
           categorySelect.setAttribute("id", "select-category")
+          categorySelect.setAttribute("multiple", "multiple")
           document.getElementById('select-options').appendChild(categorySelect);
           for (i=0; i < categoryList.length; i++) {
                let optionEntry = document.createElement('option');
@@ -86,7 +87,7 @@ function cityAndOptions() {
           
           // loop to build zip code list and append to DOM
           let zipSelect = document.createElement('select');
-          zipSelect.setAttribute("id", "select-zip")
+          zipSelect.setAttribute("id", "select-zip")          
           document.getElementById('zip-options').appendChild(zipSelect)
           for (i=0; i < zipCodeList.length; i++) {
                let zipOption = document.createElement('option');
