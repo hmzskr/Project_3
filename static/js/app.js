@@ -95,6 +95,20 @@ function cityAndOptions() {
                zipOption.appendChild(zipText)
                document.getElementById('select-zip').appendChild(zipOption)
           }
+
+          // array of Yelp price points
+          const priceArray = [1, 2, 3, 4]
+
+          // loop to build price point list and append to DOM
+          let priceSelect = document.createElement('select')
+          priceSelect.setAttribute("id", "select-price")
+          document.getElementById('price-options').appendChild(priceSelect)
+          for (i=0; i < priceArray.length; i++) {
+               let priceOption = document.createElement('option')
+               let priceText = document.createTextNode(priceArray[i])
+               priceOption.appendChild(priceText)
+               document.getElementById('select-price').appendChild(priceOption)
+          }
      })
      // catch any errors that result from the Yelp API call
      .catch(function(err) {
