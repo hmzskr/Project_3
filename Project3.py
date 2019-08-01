@@ -1,6 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
 # Dependencies
 import pandas as pd
 import numpy as np
@@ -91,32 +88,22 @@ restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
 restaurants_df['Categories'].replace(['American (New)', 'American (Traditional)'], 'American', inplace = True)
 restaurants_df['Categories'].replace(['New Mexican Cuisine'], 'Mexican', inplace = True)
 
-
-
-
 cat_list_df= pd.DataFrame(columns=new_cat_list)
-
 
 new_df = pd.merge(restaurants_df, cat_list_df, how='left', left_on = restaurants_df.ID, right_on = cat_list_df.Southern)
 
 for i in new_cat_list:
     new_df.loc[(new_df.Categories.str.contains(i)==True), i] = 1
 
-
 new_df.drop(axis = 1, columns = ['Categories', 'key_0'], inplace = True)
-
 
 new_df.drop_duplicates(subset = 'ID', inplace = True)
 
 new_df.fillna(0, inplace = True)
 
-
-modeling_df = new_df.drop(axis = 1, columns = ['ID', 'Name', 'Categories_All', 'Is_Closed', 'Latitude', 'Longitude',                                               'Address', 'City', 'State'])
-
-
+modeling_df = new_df.drop(axis = 1, columns = ['ID', 'Name', 'Categories_All', 'Is_Closed', 'Latitude', 'Longitude', 'Address', 'City', 'State'])
 
 modeling_df = pd.get_dummies(modeling_df)
-
 
 L = list(modeling_df.columns)
 
@@ -125,10 +112,8 @@ for i in range(3):
 
 modeling_df[L] = modeling_df[L].astype('category')
 
-
 X = modeling_df.drop(axis = 1, columns = ['Review_Count', 'Rating'])
 y = modeling_df[['Rating']]
-
 
 from sklearn.model_selection import train_test_split
 
@@ -139,7 +124,6 @@ print(X_test.shape, y_test.shape)
 
 import warnings
 warnings.filterwarnings('ignore')
-
 
 from sklearn.ensemble import RandomForestRegressor
 
@@ -157,15 +141,12 @@ user_price = 2
 
 user_df.Price = user_price
 
-
 zip_column = [col for col in user_df.columns if user_zipcode in col]
 user_df[zip_column] = 1
-
 
 for category in user_categories:
     cat_column = [col for col in user_df.columns if category == col]
     user_df[cat_column] = 1
-
 
 # Prediction
 user_prediction = np.round(rf.predict(user_df) * 2) / 2
@@ -178,13 +159,10 @@ user_prediction
 
 
 
-
 map_df = restaurants_df[restaurants_df.Is_Closed == False].drop(axis = 1, columns = ['ID', 'Is_Closed', 'Categories'])
 
 map_df.drop_duplicates(inplace = True)
 
-
 map_df_display = map_df[(map_df.Zip_Code == user_zipcode) & (map_df.Categories_All.str.contains('|'.join(user_categories)))]
-
 
 map_df_display['Price'].replace({4 : '$$$$', 3: '$$$', 2 : '$$', 1 : '$'}, inplace = True)

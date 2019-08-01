@@ -1,11 +1,13 @@
 # app.py
-from flask import Flask, jsonify, request, render_template
+from flask import Flask, jsonify, request, render_template, session
 import pandas as pd
 import numpy as np
 import requests
 import time
 
 app = Flask(__name__)
+
+app.secret_key = "whatever"
 
 @app.route('/hello', methods=['GET', 'POST'])
 def hello():
@@ -94,23 +96,147 @@ def citytest():
             restaurant_count += 1
             print(f'Restaurant #{restaurant_count} data retrieved.')
             
-                
-    print("--- %s seconds ---" % (time.time() - start_time))
+    # cast category & zip code lists to sets to remove duplicates for html rendering             
     new_cat_list = list(set(categories_list))
     new_zip_list = list(set(zip_code_list))
-    print("Number of items in list: ", len(new_cat_list))
-    print(price_list)
 
+    # set lists filled by API results as session variables to call elsewhere
+    session['id_list'] = id_list
+    session['name_list'] = name_list
+    session['is_closed_list'] = is_closed_list
+    session['review_count_list'] = review_count_list
+    session['categories_list'] = categories_list
+    session['rating_list'] = rating_list
+    session['latitude_list'] = latitude_list
+    session['longitude_list'] = longitude_list
+    session['price_list'] = price_list
+    session['address_list'] = address_list
+    session['city_list'] = city_list
+    session['zip_code_list'] = zip_code_list
+    session['state_list'] = state_list
+    session['categories_all_list'] = categories_all_list
+    session['new_cat_list'] = new_cat_list
+    session['new_zip_list'] = new_zip_list
+
+    # print API search time result
+    print("--- %s seconds ---" % (time.time() - start_time))
+    print("Number of items in list: ", len(new_cat_list))
+    
     return jsonify(new_cat_list, new_zip_list)
 
 @app.route('/useroptions', methods=['GET', 'POST'])
 def useroptions():
     response = request.get_json()
     print(response)
-    options=response[0]
-    for i in options:
-        print(i)
-    return jsonify(response)
+    
+    # print (session['name_list'])
+
+    # set variables based on user responses   
+    user_categories = response[0]
+    user_zipcode = response[1]
+    user_price = response[2]
+    # options=response[0]
+    # for i in options:
+    #     print(i)
+    
+    # return jsonify(response)
+
+    # convert session variables back to lists to use in the subsequent code
+    id_list = session['id_list']
+    name_list = session['name_list']
+    is_closed_list = session['is_closed_list']
+    review_count_list = session['review_count_list']
+    categories_list = session['categories_list']
+    rating_list = session['rating_list']
+    latitude_list = session['latitude_list']
+    longitude_list = session['longitude_list']
+    price_list = session['price_list']
+    address_list = session['address_list']
+    city_list = session['city_list']
+    zip_code_list = session['zip_code_list']
+    state_list = session['state_list']
+    categories_all_list = session['categories_all_list']
+    new_cat_list = session['new_cat_list']
+    new_zip_list = session['new_zip_list']
+
+    restaurants_df = pd.DataFrame({'ID': id_list, 'Name': name_list, 'Is_Closed': is_closed_list, 'Review_Count': review_count_list, 'Categories_All': categories_all_list, 'Categories': categories_list, 'Rating': rating_list, 'Latitude': latitude_list, 'Rating': rating_list, 'Latitude': latitude_list, 'Longitude': longitude_list, 'Price' : price_list, 'Address': address_list, 'City': city_list, 'Zip_Code' : zip_code_list, 'State': state_list})
+    restaurants_df.drop_duplicates(keep = False, inplace = True)
+    restaurants_df.dropna(subset = ['Address'], inplace = True)
+    restaurants_df.dropna(subset = ['Price'], inplace = True)
+    restaurants_df = restaurants_df[restaurants_df.Price != '']
+    restaurants_df['Price'].replace({'$$$$$': 5, '$$$$': 4, '$$$': 3, '$$': 2, '$': 1}, inplace = True)
+    restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
+    restaurants_df['Categories'].replace(['American (New)', 'American (Traditional)'], 'American', inplace = True)
+    restaurants_df['Categories'].replace(['New Mexican Cuisine'], 'Mexican', inplace = True)
+
+    cat_list_df= pd.DataFrame(columns=new_cat_list)
+
+    new_df = pd.merge(restaurants_df, cat_list_df, how='left', left_on = restaurants_df.ID, right_on = cat_list_df.Southern)
+
+    for i in new_cat_list:
+        new_df.loc[(new_df.Categories.str.contains(i)==True), i] = 1
+
+    new_df.drop(axis = 1, columns = ['Categories', 'key_0'], inplace = True)
+
+    new_df.drop_duplicates(subset = 'ID', inplace = True)
+
+    new_df.fillna(0, inplace = True)
+
+    modeling_df = new_df.drop(axis = 1, columns = ['ID', 'Name', 'Categories_All', 'Is_Closed', 'Latitude', 'Longitude', 'Address', 'City', 'State'])
+
+    modeling_df = pd.get_dummies(modeling_df)
+
+    L = list(modeling_df.columns)
+
+    for i in range(3):
+        L.pop(0)
+
+    modeling_df[L] = modeling_df[L].astype('category')
+
+    X = modeling_df.drop(axis = 1, columns = ['Review_Count', 'Rating'])
+    y = modeling_df[['Rating']]
+
+    from sklearn.model_selection import train_test_split
+
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.5)
+
+    print(X_train.shape, y_train.shape)
+    print(X_test.shape, y_test.shape)
+
+    import warnings
+    warnings.filterwarnings('ignore')
+
+    from sklearn.ensemble import RandomForestRegressor
+
+    rf = RandomForestRegressor(n_jobs = -1, oob_score=True, verbose=0, max_depth=3)
+    rf = rf.fit(X_train, y_train)
+
+    user_df = X.drop(X.index)
+    user_df['Price'] = [0]
+    user_df.fillna(0, inplace = True)
+
+    # Inputs from user
+    user_zipcode = '91604'
+    user_categories = ['Mexican', 'Bars']
+    user_price = 2
+
+    user_df.Price = user_price
+
+    zip_column = [col for col in user_df.columns if user_zipcode in col]
+    user_df[zip_column] = 1
+
+    for category in user_categories:
+        cat_column = [col for col in user_df.columns if category == col]
+        user_df[cat_column] = 1
+
+    # Prediction
+    user_prediction = np.round(rf.predict(user_df) * 2) / 2
+    user_prediction = user_prediction[0] #4
+
+    # Prediction to display
+    print(user_prediction)
+    return jsonify(user_prediction)
+    
         
 @app.route('/')
 def index():
