@@ -67,6 +67,8 @@ function cityAndOptions() {
           let categoryList = optionsList[0] 
           let zipCodeList = optionsList[1]                   
 
+          categoryList = categoryList.sort()
+          zipCodeList = zipCodeList.sort()
           // sets vars to empty arrays to build selection lists
           let categoryOutput = '';
           let zipCodeOutput = '';
