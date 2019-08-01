@@ -93,244 +93,244 @@ restaurants_df['Categories'].replace(['New Mexican Cuisine'], 'Mexican', inplace
 
 # # In[5]:
 
-# restaurants_df.count()
+restaurants_df.count()
 
 
-# # In[6]:
+# In[6]:
 
 
-# restaurants_df.head()
+restaurants_df.head()
 
 
-# # In[7]:
+# In[7]:
 
 
-# category_df = restaurants_df[['Categories']]
+category_df = restaurants_df[['Categories']]
 
 
-# # In[8]:
+# In[8]:
 
 
-# cat_list = list(category_df.Categories.unique())
+cat_list = list(category_df.Categories.unique())
 
 
-# # In[9]:
+# In[9]:
 
 
-# cat_list.sort()
+cat_list.sort()
 
 
-# # In[10]:
+# In[10]:
 
 
-# cat_list
+cat_list
 
 
-# # In[11]:
+# In[11]:
 
 
-# len(cat_list)
+len(cat_list)
 
 
-# # In[12]:
+# In[12]:
 
 
-# cat_list_df= pd.DataFrame(columns=cat_list)
+cat_list_df= pd.DataFrame(columns=cat_list)
 
 
-# # In[13]:
+# In[13]:
 
 
-# cat_list_df
+cat_list_df
 
 
-# # In[14]:
+# In[14]:
 
 
-# new_df = pd.merge(restaurants_df, cat_list_df, how='left', left_on = restaurants_df.ID, right_on = cat_list_df.Southern)
+new_df = pd.merge(restaurants_df, cat_list_df, how='left', left_on = restaurants_df.ID, right_on = cat_list_df.Southern)
 
 
-# # In[15]:
+# In[15]:
 
 
-# new_df.head(5)
+new_df.head(5)
 
 
-# # In[16]:
+# In[16]:
 
 
-# cat_list_df
+cat_list_df
 
 
-# # In[17]:
+# In[17]:
 
 
-# for i in cat_list:
-#     new_df.loc[(new_df.Categories.str.contains(i)==True), i] = 1
+for i in cat_list:
+    new_df.loc[(new_df.Categories.str.contains(i)==True), i] = 1
 
 
-# # In[18]:
+# In[18]:
 
 
-# new_df.drop(axis = 1, columns = ['Categories', 'key_0'], inplace = True)
+new_df.drop(axis = 1, columns = ['Categories', 'key_0'], inplace = True)
 
 
-# # In[19]:
+# In[19]:
 
 
-# new_df.drop_duplicates(subset = 'ID', inplace = True)
+new_df.drop_duplicates(subset = 'ID', inplace = True)
 
 
-# # In[20]:
+# In[20]:
 
 
-# new_df.count()
+new_df.count()
 
 
-# # In[21]:
+# In[21]:
 
 
-# new_df.fillna(0, inplace = True)
+new_df.fillna(0, inplace = True)
 
 
-# # In[22]:
+# In[22]:
 
 
-# new_df.head()
+new_df.head()
 
 
-# # In[23]:
+# In[23]:
 
 
-# modeling_df = new_df.drop(axis = 1, columns = ['ID', 'Name', 'Categories_All', 'Is_Closed', 'Latitude', 'Longitude',                                               'Address', 'City', 'State'])
+modeling_df = new_df.drop(axis = 1, columns = ['ID', 'Name', 'Categories_All', 'Is_Closed', 'Latitude', 'Longitude',                                               'Address', 'City', 'State'])
 
 
-# # In[24]:
+# In[24]:
 
 
-# len(new_df[new_df.Southern == 1])
+len(new_df[new_df.Southern == 1])
 
 
-# # In[25]:
+# In[25]:
 
 
-# modeling_df.head()
+modeling_df.head()
 
 
-# # In[26]:
+# In[26]:
 
 
-# map_df = restaurants_df[restaurants_df.Is_Closed == False].drop(axis = 1, columns = ['ID', 'Is_Closed', 'Categories'])
+map_df = restaurants_df[restaurants_df.Is_Closed == False].drop(axis = 1, columns = ['ID', 'Is_Closed', 'Categories'])
 
 
-# # In[27]:
+# In[27]:
 
 
-# map_df.drop_duplicates(inplace = True)
+map_df.drop_duplicates(inplace = True)
 
 
-# # In[28]:
+# In[28]:
 
 
-# map_df.count()
+map_df.count()
 
 
-# # In[29]:
+# In[29]:
 
 
-# map_df.head()
+map_df.head()
 
 
-# # In[30]:
+# In[30]:
 
 
-# modeling_df = pd.get_dummies(modeling_df)
+modeling_df = pd.get_dummies(modeling_df)
 
 
-# # In[31]:
+# In[31]:
 
 
-# L = list(modeling_df.columns)
+L = list(modeling_df.columns)
 
-# for i in range(3):
-#     L.pop(0)
+for i in range(3):
+    L.pop(0)
 
 
-# # In[32]:
+# In[32]:
 
 
-# modeling_df[L] = modeling_df[L].astype('category')
+modeling_df[L] = modeling_df[L].astype('category')
 
 
-# # In[33]:
+# In[33]:
 
 
-# modeling_df.dtypes
+modeling_df.dtypes
 
 
-# # In[34]:
+# In[34]:
 
 
-# modeling_df.columns
+modeling_df.columns
 
 
-# # In[35]:
+# In[35]:
 
 
-# X = modeling_df.drop(axis = 1, columns = ['Review_Count', 'Rating'])
-# y = modeling_df[['Rating']]
+X = modeling_df.drop(axis = 1, columns = ['Review_Count', 'Rating'])
+y = modeling_df[['Rating']]
 
 
-# # In[36]:
+# In[36]:
 
 
-# from sklearn.model_selection import train_test_split
+from sklearn.model_selection import train_test_split
 
-# X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.5)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.5)
 
-# print(X_train.shape, y_train.shape)
-# print(X_test.shape, y_test.shape)
+print(X_train.shape, y_train.shape)
+print(X_test.shape, y_test.shape)
 
 
-# # In[37]:
+# In[37]:
 
 
-# import warnings
-# warnings.filterwarnings('ignore')
+import warnings
+warnings.filterwarnings('ignore')
 
 
-# # In[38]:
+# In[38]:
 
 
-# from sklearn.ensemble import RandomForestRegressor
-# from sklearn.metrics import mean_squared_error
+from sklearn.ensemble import RandomForestRegressor
+from sklearn.metrics import mean_squared_error
 
-# rf = RandomForestRegressor(n_jobs = -1, oob_score=True, verbose=0, max_depth=3)
-# rf = rf.fit(X_train, y_train)
+rf = RandomForestRegressor(n_jobs = -1, oob_score=True, verbose=0, max_depth=3)
+rf = rf.fit(X_train, y_train)
 
-# print(mean_squared_error(y_train, rf.predict(X_train).ravel()))
-# print(mean_squared_error(y_test, rf.predict(X_test).ravel()))
+print(mean_squared_error(y_train, rf.predict(X_train).ravel()))
+print(mean_squared_error(y_test, rf.predict(X_test).ravel()))
 
 
-# # In[40]:
+# In[40]:
 
 
-# np.round(rf.predict(X_test)[0:5] * 2) / 2
+np.round(rf.predict(X_test)[0:5] * 2) / 2
 
 
-# # In[39]:
+# In[39]:
 
 
-# y_test[0:5]
+y_test[0:5]
 
 
-# # In[40]:
+# In[40]:
 
 
-# np.max(np.round(rf.predict(X_test) * 2) / 2)
+np.max(np.round(rf.predict(X_test) * 2) / 2)
 
 
-# # In[ ]:
+# In[ ]:
 
 
 
