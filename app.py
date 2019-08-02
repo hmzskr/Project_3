@@ -138,25 +138,7 @@ def useroptions():
     # set variables based on user responses   
     user_categories = response[0]
     user_zipcode = response[1]
-    user_price = response[2]
-    
-    # convert session variables back to lists to use in the subsequent code
-    # id_list = session['id_list']
-    # name_list = session['name_list']
-    # is_closed_list = session['is_closed_list']
-    # review_count_list = session['review_count_list']
-    # categories_list = session['categories_list']
-    # rating_list = session['rating_list']
-    # latitude_list = session['latitude_list']
-    # longitude_list = session['longitude_list']
-    # price_list = session['price_list']
-    # address_list = session['address_list']
-    # city_list = session['city_list']
-    # zip_code_list = session['zip_code_list']
-    # state_list = session['state_list']
-    # categories_all_list = session['categories_all_list']
-    # new_cat_list = session['new_cat_list']
-    # new_zip_list = session['new_zip_list']    
+    user_price = response[2]       
 
     # create dataframe based on user choices
     restaurants_df = pd.DataFrame({
