@@ -235,19 +235,17 @@ def useroptions():
     # Prediction
     user_prediction = np.round(rf.predict(user_df) * 2) / 2
     user_prediction = user_prediction[0] #4
-
+    
     # Prediction to display
     print(user_prediction)
     return jsonify(user_prediction)
 
 @app.route("/map", methods=["GET", "POST"])
-def send(categories, zip_codes, price):
+def send():
+    
+    map_df = pd.DataFrame(session['user_categories'], session['user_zipcode'], session['user_price'])
 
-    categories = session['user_categories']
-    zip_codes = session['user_zipcode']
-    price = session['user_price']
-
-    map_df = pd.DataFrame
+    print(map_df)
     
     session['name_list'] = list(map_df.Name)
     session['review_list'] = list(map_df.Review_Count)

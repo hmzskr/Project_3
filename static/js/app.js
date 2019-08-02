@@ -167,7 +167,8 @@ function sendOptions() {
      .catch(function(err) {
           console.log(err)
           document.getElementById('response-card').innerHTML = `Hmmmm... something went wrong.`
-     })
+     })     
+}
 
 // click handler to reload page and start new API search
 d3.select('#do-over').on('click', function() {
