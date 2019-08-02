@@ -238,7 +238,42 @@ def useroptions():
 
     # Prediction to display
     print(user_prediction)
-    return jsonify(user_prediction)    
+    return jsonify(user_prediction)
+
+@app.route("/map", methods=["GET", "POST"])
+def send(categories, zip_codes, price):
+
+    categories = session['user_categories']
+    zip_codes = session['user_zipcode']
+    price = session['user_price']
+
+    map_df = pd.DataFrame
+    
+    session['name_list'] = list(map_df.Name)
+    session['review_list'] = list(map_df.Review_Count)
+    session['category_list'] = list(map_df.Categories_All)
+    session['rating_list'] = list(map_df.Rating)
+    session['latitude_list'] = list(map_df.Latitude)
+    session['longitude_list'] = list(map_df.Longitude)
+    session['price_list'] = list(map_df.Price)
+    session['address_list'] = list(map_df.Address)
+    session['city_list'] = list(map_df.City)
+    session['zip_list'] = list(map_df.Zip_Code)
+    session['state_list'] = list(map_df.State)
+    
+    return render_template('index.html',
+    names=json.dumps(session['name_list']),
+    reviews=json.dumps(session['review_list']),
+    categories=json.dumps(session['category_list']),
+    ratings=json.dumps(session['rating_list']),
+    latitude=json.dumps(session['latitude_list']),
+    longitude=json.dumps(session['longitude_list']),
+    price=json.dumps(session['price_list']),
+    address=json.dumps(session['address_list']),
+    city=json.dumps(session['city_list']),
+    zip_code=json.dumps(session['zip_list']),
+    state=json.dumps(session['state_list'])
+    )    
         
 @app.route('/')
 def index():

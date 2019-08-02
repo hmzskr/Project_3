@@ -1,5 +1,3 @@
-
-
 var geojson_final = []
 
 for (i = 0; i < names.length; i ++)
