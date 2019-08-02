@@ -138,7 +138,12 @@ def useroptions():
     # set variables based on user responses   
     user_categories = response[0]
     user_zipcode = response[1]
-    user_price = response[2]       
+    user_price = response[2]
+
+    # set user responses as session vars to use in /map route
+    session['user_categories'] = user_categories
+    session['user_zipcode'] = user_zipcode
+    session['user_price'] = user_price
 
     # create dataframe based on user choices
     restaurants_df = pd.DataFrame({
@@ -233,8 +238,7 @@ def useroptions():
 
     # Prediction to display
     print(user_prediction)
-    return jsonify(user_prediction)
-    
+    return jsonify(user_prediction)    
         
 @app.route('/')
 def index():
