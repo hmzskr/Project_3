@@ -4,6 +4,7 @@ import pandas as pd
 import numpy as np
 import requests
 import time
+import warnings
 
 app = Flask(__name__)
 
@@ -126,6 +127,8 @@ def citytest():
 
 @app.route('/useroptions', methods=['GET', 'POST'])
 def useroptions():
+
+    warnings.filterwarnings('ignore')
     
     # get response from javascript and convert to json
     response = request.get_json()
@@ -196,9 +199,6 @@ def useroptions():
     print(X_train.shape, y_train.shape)
     print(X_test.shape, y_test.shape)
 
-    import warnings
-    warnings.filterwarnings('ignore')
-
     # random forest set up
     from sklearn.ensemble import RandomForestRegressor
     rf = RandomForestRegressor(n_jobs = -1, oob_score=True, verbose=0, max_depth=3)
@@ -207,6 +207,11 @@ def useroptions():
     user_df = X.drop(X.index)
     user_df['Price'] = [0]
     user_df.fillna(0, inplace = True)
+
+    # # Inputs from user
+    # user_zipcode = '91604'
+    # user_categories = ['Burgers']
+    # user_price = 2
 
     user_df.Price = user_price
 
