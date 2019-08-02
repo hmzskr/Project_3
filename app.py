@@ -218,11 +218,6 @@ def useroptions():
     print('************** User columns:')
     print(user_df.columns)
 
-    # # Inputs from user
-    # user_zipcode = '91604'
-    # user_categories = ['Burgers']
-    # user_price = 2
-
     user_df.Price = user_price
 
     zip_column = [col for col in user_df.columns if user_zipcode in col]
