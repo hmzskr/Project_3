@@ -120,6 +120,7 @@ def citytest():
     session['new_zip_list'] = new_zip_list
 
     # print API search time result
+    print (session['categories_list'])
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Number of items in list: ", len(new_cat_list))
     
@@ -140,25 +141,45 @@ def useroptions():
     user_price = response[2]
     
     # convert session variables back to lists to use in the subsequent code
-    id_list = session['id_list']
-    name_list = session['name_list']
-    is_closed_list = session['is_closed_list']
-    review_count_list = session['review_count_list']
-    categories_list = session['categories_list']
-    rating_list = session['rating_list']
-    latitude_list = session['latitude_list']
-    longitude_list = session['longitude_list']
-    price_list = session['price_list']
-    address_list = session['address_list']
-    city_list = session['city_list']
-    zip_code_list = session['zip_code_list']
-    state_list = session['state_list']
-    categories_all_list = session['categories_all_list']
-    new_cat_list = session['new_cat_list']
-    new_zip_list = session['new_zip_list']
+    # id_list = session['id_list']
+    # name_list = session['name_list']
+    # is_closed_list = session['is_closed_list']
+    # review_count_list = session['review_count_list']
+    # categories_list = session['categories_list']
+    # rating_list = session['rating_list']
+    # latitude_list = session['latitude_list']
+    # longitude_list = session['longitude_list']
+    # price_list = session['price_list']
+    # address_list = session['address_list']
+    # city_list = session['city_list']
+    # zip_code_list = session['zip_code_list']
+    # state_list = session['state_list']
+    # categories_all_list = session['categories_all_list']
+    # new_cat_list = session['new_cat_list']
+    # new_zip_list = session['new_zip_list']    
 
     # create dataframe based on user choices
-    restaurants_df = pd.DataFrame({'ID': id_list, 'Name': name_list, 'Is_Closed': is_closed_list, 'Review_Count': review_count_list, 'Categories_All': categories_all_list, 'Categories': categories_list, 'Rating': rating_list, 'Latitude': latitude_list, 'Rating': rating_list, 'Latitude': latitude_list, 'Longitude': longitude_list, 'Price' : price_list, 'Address': address_list, 'City': city_list, 'Zip_Code' : zip_code_list, 'State': state_list})
+    restaurants_df = pd.DataFrame({
+        'ID': session['id_list'],
+        'Name': session['name_list'],
+        'Is_Closed': session['is_closed_list'],
+        'Review_Count': session['review_count_list'],
+        'Categories_All': session['categories_all_list'],
+        'Categories': session['categories_list'],
+        'Rating': session['rating_list'],
+        'Latitude': session['latitude_list'],
+        'Rating': session['rating_list'],
+        'Latitude': session['latitude_list'],
+        'Longitude': session['longitude_list'],
+        'Price': session['price_list'],
+        'Address': session['address_list'],
+        'City': session['city_list'],
+        'Zip_Code': session['zip_code_list'],
+        'State': session['state_list']
+        })
+    
+    print(session['categories_list'])
+
     restaurants_df.drop_duplicates(keep = False, inplace = True)
     restaurants_df.dropna(subset = ['Address'], inplace = True)
     restaurants_df.dropna(subset = ['Price'], inplace = True)
@@ -168,12 +189,12 @@ def useroptions():
     restaurants_df['Categories'].replace(['American (New)', 'American (Traditional)'], 'American', inplace = True)
     restaurants_df['Categories'].replace(['New Mexican Cuisine'], 'Mexican', inplace = True)
 
-    cat_list_df= pd.DataFrame(columns=new_cat_list)
+    cat_list_df= pd.DataFrame(columns=session['new_cat_list'])
     cat_list_df['new_col'] = pd.Series()
 
     new_df = pd.merge(restaurants_df, cat_list_df, how='left', left_on = restaurants_df.ID, right_on = cat_list_df.new_col)
 
-    for i in new_cat_list:
+    for i in session['new_cat_list']:
         new_df.loc[(new_df.Categories.str.contains(i)==True), i] = 1
 
     new_df.drop(axis = 1, columns = ['Categories', 'key_0', 'new_col'], inplace = True)
