@@ -210,6 +210,8 @@ def useroptions():
     user_df = X.drop(X.index)
     user_df['Price'] = [0]
     user_df.fillna(0, inplace = True)
+    print('************** User columns:')
+    print(user_df.columns)
 
     # # Inputs from user
     # user_zipcode = '91604'
