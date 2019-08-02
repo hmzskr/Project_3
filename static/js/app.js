@@ -68,11 +68,7 @@ function cityAndOptions() {
 
           // sorts categories alphabetically & zipcodes numerically in their respective elements
           categoryList = categoryList.sort()
-          zipCodeList = zipCodeList.sort()
-
-          // sets vars to empty arrays to build selection lists
-          let categoryOutput = '';
-          let zipCodeOutput = '';
+          zipCodeList = zipCodeList.sort()          
 
           // loop to build category list, set element attributes and append to DOM
           let categorySelect = document.createElement('select');
@@ -143,9 +139,21 @@ function sendOptions() {
           let optionsResponse = response.json()
           return optionsResponse
      }).then(function(optionsResponse) {
-          console.log('Options result: ')
-          console.log(optionsResponse)
+          
+          // push prediction result to html
+          let analysisResult = document.createElement('div')
+          analysisResult.setAttribute("class", "card-body")
+          analysisResult.setAttribute("id", "result")
+          document.getElementById('response-card').appendChild(analysisResult)
+          let p = document.createElement('p')
+          p.setAttribute("class", "card-text")
+          let result = document.createTextNode(`Prediction: ${optionsResponse}`)
+          p.appendChild(result)
+          document.getElementById('result').appendChild(p)
      })
-     
+     .catch(function(err) {
+          console.log(err)
+          document.getElementById('response-card').innerHTML = `Hmmmm... something went wrong.`
+     })     
 }
 

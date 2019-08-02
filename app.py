@@ -126,21 +126,16 @@ def citytest():
 
 @app.route('/useroptions', methods=['GET', 'POST'])
 def useroptions():
+    
+    # get response from javascript and convert to json
     response = request.get_json()
     print(response)
     
-    # print (session['name_list'])
-
     # set variables based on user responses   
     user_categories = response[0]
     user_zipcode = response[1]
     user_price = response[2]
-    # options=response[0]
-    # for i in options:
-    #     print(i)
     
-    # return jsonify(response)
-
     # convert session variables back to lists to use in the subsequent code
     id_list = session['id_list']
     name_list = session['name_list']
@@ -159,6 +154,7 @@ def useroptions():
     new_cat_list = session['new_cat_list']
     new_zip_list = session['new_zip_list']
 
+    # create dataframe based on user choices
     restaurants_df = pd.DataFrame({'ID': id_list, 'Name': name_list, 'Is_Closed': is_closed_list, 'Review_Count': review_count_list, 'Categories_All': categories_all_list, 'Categories': categories_list, 'Rating': rating_list, 'Latitude': latitude_list, 'Rating': rating_list, 'Latitude': latitude_list, 'Longitude': longitude_list, 'Price' : price_list, 'Address': address_list, 'City': city_list, 'Zip_Code' : zip_code_list, 'State': state_list})
     restaurants_df.drop_duplicates(keep = False, inplace = True)
     restaurants_df.dropna(subset = ['Address'], inplace = True)
@@ -178,13 +174,10 @@ def useroptions():
         new_df.loc[(new_df.Categories.str.contains(i)==True), i] = 1
 
     new_df.drop(axis = 1, columns = ['Categories', 'key_0', 'new_col'], inplace = True)
-
     new_df.drop_duplicates(subset = 'ID', inplace = True)
-
     new_df.fillna(0, inplace = True)
 
     modeling_df = new_df.drop(axis = 1, columns = ['ID', 'Name', 'Categories_All', 'Is_Closed', 'Latitude', 'Longitude', 'Address', 'City', 'State'])
-
     modeling_df = pd.get_dummies(modeling_df)
 
     L = list(modeling_df.columns)
@@ -197,18 +190,17 @@ def useroptions():
     X = modeling_df.drop(axis = 1, columns = ['Review_Count', 'Rating'])
     y = modeling_df[['Rating']]
 
+    # set test & traning data sets
     from sklearn.model_selection import train_test_split
-
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.5)
-
     print(X_train.shape, y_train.shape)
     print(X_test.shape, y_test.shape)
 
     import warnings
     warnings.filterwarnings('ignore')
 
+    # random forest set up
     from sklearn.ensemble import RandomForestRegressor
-
     rf = RandomForestRegressor(n_jobs = -1, oob_score=True, verbose=0, max_depth=3)
     rf = rf.fit(X_train, y_train)
 

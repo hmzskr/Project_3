@@ -56,8 +56,9 @@
      <div class="container">
           <form>
                <div class="form-group">
+                    <h4 class="mt-4">Enter a city & state to get options for that location.</h4>
                     <label for="cityinput"></label>
-                    <input type="text" class="form-control mb-3" id="cityinput" placeholder="Enter City & State Here (ie, Los Angeles, CA)">
+                    <input type="text" class="form-control mb-4" id="cityinput" placeholder="(ie, Los Angeles, CA)">
                     <button type="submit" id="citysubmit" class="btn btn-secondary">Submit</button>
                </div>
           </form>
@@ -82,6 +83,13 @@
                </div>               
           </div>
      </div>     
+     <div class="container">
+          <div class="row">
+               <div class="col-12">
+                    <div id="response-card"></div>
+               </div>
+          </div>
+     </div>
 
      <!--local JS dependencies-->
      <!-- <script src="{{ url_for('static', filename='js/config.js') }}"></script> -->
