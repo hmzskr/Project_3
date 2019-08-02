@@ -40,10 +40,14 @@ d3.select('#citysubmit').on('click', cityAndOptions)
 // fetch function to post city input & return category list & zipcodes via flask from the Yelp API
 function cityAndOptions() {     
      d3.event.preventDefault();
-     
+
      // converts city input to variable
      let inputElement = d3.select(".form-control")
      let inputValue = inputElement.property("value");
+
+     // changes main page headline after location is submitted
+     let headline = d3.select('#headline')
+     headline.html(`Gathering options for ${inputValue}...`)
      
      // fetch request to post city input to flask
      fetch('/citytest', {
@@ -61,6 +65,12 @@ function cityAndOptions() {
      // callback function once result is returned to generate category list for multi-select options
      }).then(function (optionsList) {
           console.log('POST response: ');
+
+          // updates headline, makes selection column headlines visible via css
+          headline.html(`Select your options for ${inputValue}:`)
+          document.getElementById('cat-select').style.visibility="visible"
+          document.getElementById('zip-select').style.visibility="visible"
+          document.getElementById('price-select').style.visibility="visible"          
 
           // vars to split the optionsList returned into separate arrays for categories & zip codes
           let categoryList = optionsList[0] 
@@ -117,7 +127,7 @@ function cityAndOptions() {
      })
      // catch any errors that result from the Yelp API call
      .catch(function(err) {
-          document.getElementById('select-options').innerHTML = `<p>Yelp's API had a brainfart. Reload the page & try again!</p>`;
+          headline.html('The Yelp API had a brain fart. Press "Start Over" to try again')
      })
 }
 
@@ -139,6 +149,9 @@ function sendOptions() {
           let optionsResponse = response.json()
           return optionsResponse
      }).then(function(optionsResponse) {
+
+          // makes result div headline visible via css
+          document.getElementById('final-result').style.visibility="visible"
           
           // push prediction result to html
           let analysisResult = document.createElement('div')
@@ -156,4 +169,9 @@ function sendOptions() {
           document.getElementById('response-card').innerHTML = `Hmmmm... something went wrong.`
      })     
 }
+
+// click handler to reload page and start new API search
+d3.select('#do-over').on('click', function() {
+     window.location.reload()
+})
 

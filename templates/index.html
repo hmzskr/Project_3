@@ -5,7 +5,7 @@
      <meta charset="UTF-8">
      <meta name="viewport" content="width=device-width, initial-scale=1.0">
      <meta http-equiv="X-UA-Compatible" content="ie=edge">
-     <title>Document</title>
+     <title>Yelp API | Machine Learning Prediction</title>
 
      <!--jQuery CDN-->
      <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
@@ -49,43 +49,55 @@
      <div class="container">
           <div class="container-fluid-nav text-center">
                <nav class="navbar bg-dark">
-                    <span class="navbar-brand mb-0 text-white">Yelp Machine Learning Thing</span>
+                    <span class="navbar-brand mb-0 text-white">Yelp API | Machine Learning Prediction</span>
+                    <button class="btn btn-light" id="do-over">Start Over</button>
                </nav>
           </div>
      </div>
      <div class="container">
-          <form>
-               <div class="form-group">
-                    <h4 class="mt-4">Enter a city & state to get options for that location.</h4>
-                    <label for="cityinput"></label>
-                    <input type="text" class="form-control mb-4" id="cityinput" placeholder="(ie, Los Angeles, CA)">
-                    <button type="submit" id="citysubmit" class="btn btn-secondary">Submit</button>
-               </div>
-          </form>
-     </div>
-     <div class="container">
           <div class="row">
-               <div class="col-4">
+               <div class="col-2"></div>
+               <div class="col-8 text-center">
+                    <form>
+                         <div class="form-group">
+                              <h4 class="mt-4" id="headline">Enter a city & state to get options for that location.</h4>
+                              <label for="cityinput"></label>
+                              <input type="text" class="form-control mb-4" id="cityinput"
+                                   placeholder="(ie, Los Angeles, CA)">
+                              <button type="submit" id="citysubmit" class="btn btn-secondary">Submit</button>
+                         </div>
+                    </form>
+               </div>
+               <div class="col-2"></div>
+          </div>
+     </div>
+     <div class="container mt-3">
+          <div class="row">
+               <div class="col-4 text-center">
+                    <h4 class="mb-3" id="cat-select">Select Categories: </h4>
                     <div id="select-options"></div>
                </div>
-               <div class="col-4">
+               <div class="col-4 text-center">
+                    <h4 class="mb-3" id="zip-select">Select ZIP Code:</h4>
                     <div id="zip-options"></div>
                </div>
-               <div class="col-4">
+               <div class="col-4 text-center">
+                    <h4 class="mb-3" id="price-select">Select Price Point:</h4>
                     <div id="price-options"></div>
                </div>
-          </div>         
-     </div>
-     <div class="container">
-          <div class="row">
-               <div class="col-12">
-                    <div id="options-button"></div>
-               </div>               
           </div>
-     </div>     
-     <div class="container">
+     </div>
+     <div class="container mt-3 mb-3">
           <div class="row">
-               <div class="col-12">
+               <div class="col-12 text-center">
+                    <div id="options-button"></div>
+               </div>
+          </div>
+     </div>
+     <div class="container mt-4">
+          <div class="row">
+               <div class="col-12 text-center">
+                    <h4 id="final-result">Final Machine Learning Result:</h4>
                     <div id="response-card"></div>
                </div>
           </div>

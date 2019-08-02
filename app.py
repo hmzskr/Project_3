@@ -208,11 +208,6 @@ def useroptions():
     user_df['Price'] = [0]
     user_df.fillna(0, inplace = True)
 
-    # Inputs from user
-    user_zipcode = '91604'
-    user_categories = ['Mexican', 'Bars']
-    user_price = 2
-
     user_df.Price = user_price
 
     zip_column = [col for col in user_df.columns if user_zipcode in col]
@@ -220,7 +215,7 @@ def useroptions():
 
     for category in user_categories:
         cat_column = [col for col in user_df.columns if category == col]
-        user_df[cat_column] = 1
+        user_df[cat_column[0]] = 1
 
     # Prediction
     user_prediction = np.round(rf.predict(user_df) * 2) / 2
