@@ -170,13 +170,14 @@ def useroptions():
     restaurants_df['Categories'].replace(['New Mexican Cuisine'], 'Mexican', inplace = True)
 
     cat_list_df= pd.DataFrame(columns=new_cat_list)
+    cat_list_df['new_col'] = pd.Series()
 
-    new_df = pd.merge(restaurants_df, cat_list_df, how='left', left_on = restaurants_df.ID, right_on = cat_list_df.Southern)
+    new_df = pd.merge(restaurants_df, cat_list_df, how='left', left_on = restaurants_df.ID, right_on = cat_list_df.new_col)
 
     for i in new_cat_list:
         new_df.loc[(new_df.Categories.str.contains(i)==True), i] = 1
 
-    new_df.drop(axis = 1, columns = ['Categories', 'key_0'], inplace = True)
+    new_df.drop(axis = 1, columns = ['Categories', 'key_0', 'new_col'], inplace = True)
 
     new_df.drop_duplicates(subset = 'ID', inplace = True)
 
