@@ -271,6 +271,15 @@ def useroptions():
     user_prediction = np.round(rf.predict(user_df) * 2) / 2
     user_prediction = user_prediction[0] #4
     # user_prediction = 4
+
+    map_df = restaurants_df[restaurants_df.Is_Closed == False].drop(axis = 1, columns = ['ID', 'Is_Closed', 'Categories'])
+    map_df.drop_duplicates(inplace = True)
+
+    map_df_display = map_df[(map_df.Zip_Code == int(user_zipcode)) & (map_df.Categories_All.str.contains('|'.join(user_categories)))]
+    map_df_display['Price'].replace({4 : '$$$$', 3: '$$$', 2 : '$$', 1 : '$'}, inplace = True)
+    map_df_display.to_csv('map_info.csv')
+
+    # print(map_df_display)
     
     # Prediction to display
     print(user_prediction)
@@ -280,6 +289,8 @@ def useroptions():
 def buildmap():
     message = {'greeting': "Time for the map!"}
     return jsonify(message)
+    map_df_display = pd.read_csv('map_info.csv')
+
     # map_df = pd.DataFrame(session['user_categories'], session['user_zipcode'], session['user_price'])
 
     # print(map_df)
