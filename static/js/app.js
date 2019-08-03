@@ -1,39 +1,3 @@
-// GET (default method) - dummy code for testing
-fetch('/hello')
-     .then(function (response) {
-          return response.text();
-     }).then(function (text) {
-          console.log('GET response text:');
-          console.log(text); // Print the greeting as text
-     });
-
-// Send the same request - dummy code for testing
-fetch('/hello')
-     .then(function (response) {
-          return response.json(); // But parse it as JSON this time
-     })
-     .then(function (json) {
-          console.log('GET response as JSON:');
-          console.log(json); // Here’s our JSON object
-     })
-
-// fetch request - dummy code for testing
-fetch('/hello', {
-     method: 'POST',
-     headers: {
-          'Content-Type': 'application/json'
-     },
-     body: JSON.stringify({
-          "greeting": "Hello from the browser!"
-     })
-}).then(function (response) { // At this point, Flask has printed our JSON
-     return response.text();
-}).then(function (text) {
-     console.log('POST response: ');
-     // Should be 'OK' if everything was successful
-     console.log(text);
-});
-
 // event handler for the city submit button
 d3.select('#citysubmit').on('click', cityAndOptions)
 
@@ -125,13 +89,14 @@ function cityAndOptions() {
           optionsButton.innerHTML = "Submit"
           document.getElementById('options-button').appendChild(optionsButton)
      })
+
      // catch any errors that result from the Yelp API call
      .catch(function(err) {
           headline.html('The Yelp API had a brain fart. Press "Start Over" to try again')
      })
 }
 
-// fetch function to send user selected options to python and return machine learning result
+// fetch request to send user selected options to python and return machine learning result
 function sendOptions() {
      event.preventDefault();
 
@@ -170,30 +135,17 @@ function sendOptions() {
           mapButton.setAttribute("id", "makemap")
           mapButton.setAttribute("onclick", "location.href='/map'")
           mapButton.innerHTML = "Get Map"
-          document.getElementById('options-button').appendChild(mapButton)
+          document.getElementById('map-button').appendChild(mapButton)
      })
+
+     // catch any errors that result from user selected options
      .catch(function(err) {
           console.log(err)
           document.getElementById('response-card').innerHTML = `Hmmmm... something went wrong.`
      })     
 }
 
-function makeMap() {
-     event.preventDefault();
-     fetch('/buildmap')
-          .then(function(response) {
-               return response.json()
-          })
-          .then (function(data) {
-               console.log(JSON.stringify(data))
-          })
-          .catch(function(err) {
-               console.log(err)
-          })
-}
-
-// click handler to reload page and start new API search
+// click handler to reload page and start new API search from navbar
 d3.select('#do-over').on('click', function() {
      window.location.reload()
 })
-
