@@ -33,7 +33,7 @@ def citytest():
 
     start_time = time.time()
 
-    ykey = "R7cyrer-m7k19f9T_qovCdlGweHT3eN_PWY7EpkKOue03YgAZmLjewK-zu_JR34x3iOOCEeqzfBkA_Spqo9A8O9nx38zDsMvoBCJqWNhvYxzzYlveL7ugSLTTD87XXYx"
+    ykey = "YELP API KEY"
 
     yelp_url = 'https://api.yelp.com/v3/businesses/search'
     yelp_headers = {'Authorization': 'Bearer %s' % ykey}
