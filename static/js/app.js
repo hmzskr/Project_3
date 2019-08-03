@@ -168,7 +168,7 @@ function sendOptions() {
           let mapButton = document.createElement('button')
           mapButton.setAttribute("class", "btn btn-secondary")
           mapButton.setAttribute("id", "makemap")
-          mapButton.setAttribute("onclick", "makeMap()")
+          mapButton.setAttribute("onclick", "location.href='/map'")
           mapButton.innerHTML = "Get Map"
           document.getElementById('options-button').appendChild(mapButton)
      })

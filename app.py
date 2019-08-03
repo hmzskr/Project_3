@@ -5,6 +5,7 @@ import numpy as np
 import requests
 import time
 import warnings
+import json
 
 app = Flask(__name__)
 
@@ -99,9 +100,9 @@ def citytest():
             restaurant_count += 1
             print(f'Restaurant #{restaurant_count} data retrieved.')
             
-    # cast category & zip code lists to sets to remove duplicates for html rendering             
-    new_cat_list = list(set(categories_list))
-    new_zip_list = list(set(zip_code_list))
+    # # cast category & zip code lists to sets to remove duplicates for html rendering             
+    # new_cat_list = list(set(categories_list))
+    # new_zip_list = list(set(zip_code_list))
 
     # set lists filled by API results as session variables to call elsewhere
     # session['id_list'] = id_list
@@ -141,12 +142,25 @@ def citytest():
     'State': state_list
     })
 
-    print(restaurants_df.head())
+    # print(restaurants_df.head())
+
+    restaurants_df.drop_duplicates(keep = False, inplace = True)
+    restaurants_df.dropna(subset = ['Address'], inplace = True)
+    restaurants_df.dropna(subset = ['Price'], inplace = True)
+    restaurants_df = restaurants_df[restaurants_df.Price != '']
+    restaurants_df = restaurants_df[restaurants_df.Zip_Code != '']
+    restaurants_df['Price'].replace({'$$$$': 4, '$$$': 3, '$$': 2, '$': 1}, inplace = True)
+    restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
 
     restaurants_df.to_csv('restaurants_df.csv', index=False)
 
     print("--- %s seconds ---" % (time.time() - start_time))
-    print("Number of items in list: ", len(new_cat_list))
+
+    # cast category & zip code lists to sets to remove duplicates for html rendering (get list after cleanup)            
+    new_cat_list = list(set(list(restaurants_df.Categories)))
+    new_zip_list = list(set(list(restaurants_df.Zip_Code)))
+
+    print("Number of items in list: ", len(new_cat_list))        
     
     return jsonify(new_cat_list, new_zip_list)
 
@@ -171,7 +185,7 @@ def useroptions():
 
     restaurants_df = pd.read_csv('restaurants_df.csv')
 
-    # print(restaurants_df.head())
+    print(restaurants_df.head())
 
     # create dataframe based on user choices
     # restaurants_df = pd.DataFrame({
@@ -195,16 +209,20 @@ def useroptions():
     
     # print(session.get('categories_list'))
 
-    restaurants_df.drop_duplicates(keep = False, inplace = True)
-    restaurants_df.dropna(subset = ['Address'], inplace = True)
-    restaurants_df.dropna(subset = ['Price'], inplace = True)
-    restaurants_df = restaurants_df[restaurants_df.Price != '']
-    restaurants_df = restaurants_df[restaurants_df.Zip_Code != '']
-    restaurants_df['Price'].replace({'$$$$': 4, '$$$': 3, '$$': 2, '$': 1}, inplace = True)
-    restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
+    # restaurants_df.drop_duplicates(keep = False, inplace = True)
+    # restaurants_df.dropna(subset = ['Address'], inplace = True)
+    # restaurants_df.dropna(subset = ['Price'], inplace = True)
+    # restaurants_df = restaurants_df[restaurants_df.Price != '']
+    # restaurants_df = restaurants_df[restaurants_df.Zip_Code != '']
+    # restaurants_df['Price'].replace({'$$$$': 4, '$$$': 3, '$$': 2, '$': 1}, inplace = True)
+    # restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
 
-    cat_list = list(restaurants_df.Categories.unique())
+    # print(restaurants_df.Categories)
+
+    cat_list = list(set(list(restaurants_df.Categories)))
     cat_list.sort()
+
+    print(cat_list)
 
     # cat_list_df= pd.DataFrame(columns=session.get('new_cat_list'))
     cat_list_df = pd.DataFrame(columns=cat_list)
@@ -253,6 +271,8 @@ def useroptions():
 
     user_df = user_df.fillna(0).astype(np.int64)
 
+    # print(user_df)
+
     user_df.Price = user_price
 
     zip_column = [col for col in user_df.columns if user_zipcode in col]
@@ -275,9 +295,9 @@ def useroptions():
     map_df = restaurants_df[restaurants_df.Is_Closed == False].drop(axis = 1, columns = ['ID', 'Is_Closed', 'Categories'])
     map_df.drop_duplicates(inplace = True)
 
-    map_df_display = map_df[(map_df.Zip_Code == int(user_zipcode)) & (map_df.Categories_All.str.contains('|'.join(user_categories)))]
-    map_df_display['Price'].replace({4 : '$$$$', 3: '$$$', 2 : '$$', 1 : '$'}, inplace = True)
-    map_df_display.to_csv('map_info.csv')
+    map_df = map_df[(map_df.Zip_Code == int(user_zipcode)) & (map_df.Categories_All.str.contains('|'.join(user_categories)))]
+    map_df['Price'].replace({4 : '$$$$', 3: '$$$', 2 : '$$', 1 : '$'}, inplace = True)
+    map_df.to_csv('map_info.csv')
 
     # print(map_df_display)
     
@@ -285,11 +305,24 @@ def useroptions():
     print(user_prediction)
     return jsonify(user_prediction)
 
-@app.route("/buildmap", methods=["GET", "POST"])
-def buildmap():
-    message = {'greeting': "Time for the map!"}
-    return jsonify(message)
-    map_df_display = pd.read_csv('map_info.csv')
+@app.route("/map", methods=["GET", "POST"])
+def send():
+    
+    map_df=pd.read_csv("map_info.csv")
+    
+    name_list=list(map_df.Name)
+    review_list=list(map_df.Review_Count)
+    category_list=list(map_df.Categories_All)
+    rating_list=list(map_df.Rating)
+    latitude_list=list(map_df.Latitude)
+    longitude_list=list(map_df.Longitude)
+    price_list=list(map_df.Price)
+    address_list=list(map_df.Address)
+    city_list=list(map_df.City)
+    zip_list=list(map_df.Zip_Code)
+    state_list=list(map_df.State)
+    
+    return render_template('map.html', names=json.dumps(name_list), reviews=json.dumps(review_list), categories=json.dumps(category_list), ratings=json.dumps(rating_list), latitude=json.dumps(latitude_list), longitude=json.dumps(longitude_list), price=json.dumps(price_list), address=json.dumps(address_list), city=json.dumps(city_list), zip_code=json.dumps(zip_list), state=json.dumps(state_list)) 
 
     # map_df = pd.DataFrame(session['user_categories'], session['user_zipcode'], session['user_price'])
 
