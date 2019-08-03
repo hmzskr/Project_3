@@ -29,10 +29,7 @@ def citytest():
     response = request.get_json()
     for i in response:
         city = response[i]
-        print(city)  
-
-    # pd.options.display.max_rows = 999
-    # pd.options.display.max_columns = 999
+        print(city)    
 
     start_time = time.time()
 

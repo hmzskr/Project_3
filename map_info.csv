@@ -1,4 +1,6 @@
 ,Name,Review_Count,Categories_All,Rating,Latitude,Longitude,Price,Address,City,Zip_Code,State
-970,Union Pizzeria & Sports Bar,85,"Sports Bars, Pizza, Burgers",3.0,41.290965050374,-96.1586006381418,$$,3636 N 156th St,Omaha,68116,NE
-1116,Red Robin Gourmet Burgers and Brews,71,"Burgers, American (Traditional)",3.0,41.29152,-96.139838,$$,14455 W. Maple Road,Omaha,68116,NE
-1674,Runza,19,"Burgers, Fast Food",3.0,41.2914276123047,-96.18218994140621,$,17120 Evans Plz,Omaha,68116,NE
+105,Dewey's Pizza,169,"Pizza, Salad, Gluten-Free",4.5,39.74196,-84.1832,$$,131 Jasper St,Dayton,45409,OH
+364,"Milano's Pizza, Subs & Taps",96,"Pizza, Sports Bars",3.0,39.734669,-84.180468,$$,1834 Brown St,Dayton,45409,OH
+423,Palermo's,41,"Italian, Pizza",3.5,39.7145767,-84.1994088,$$,2667 S Dixie Dr,Kettering,45409,OH
+474,Flanagan's Pub,9,"Pubs, Pizza, Sandwiches",3.5,39.740997314453104,-84.1839370727539,$,101 E Stewart St,Dayton,45409,OH
+610,Submarine House,18,"American (Traditional), Pizza, Bars",3.5,39.742540000000005,-84.18271999999999,$,1137 Brown St,Dayton,45409,OH
