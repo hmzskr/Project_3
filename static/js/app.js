@@ -163,11 +163,33 @@ function sendOptions() {
           let result = document.createTextNode(`Prediction: ${optionsResponse}`)
           p.appendChild(result)
           document.getElementById('result').appendChild(p)
+
+          // add button to submit user selected options
+          let mapButton = document.createElement('button')
+          mapButton.setAttribute("class", "btn btn-secondary")
+          mapButton.setAttribute("id", "makemap")
+          mapButton.setAttribute("onclick", "makeMap()")
+          mapButton.innerHTML = "Get Map"
+          document.getElementById('options-button').appendChild(mapButton)
      })
      .catch(function(err) {
           console.log(err)
           document.getElementById('response-card').innerHTML = `Hmmmm... something went wrong.`
      })     
+}
+
+function makeMap() {
+     event.preventDefault();
+     fetch('/buildmap')
+          .then(function(response) {
+               return response.json()
+          })
+          .then (function(data) {
+               console.log(JSON.stringify(data))
+          })
+          .catch(function(err) {
+               console.log(err)
+          })
 }
 
 // click handler to reload page and start new API search
