@@ -30,8 +30,8 @@ def citytest():
         city = response[i]
         print(city)  
 
-    pd.options.display.max_rows = 999
-    pd.options.display.max_columns = 999
+    # pd.options.display.max_rows = 999
+    # pd.options.display.max_columns = 999
 
     start_time = time.time()
 
@@ -58,6 +58,8 @@ def citytest():
     categories_all_list = []
 
     restaurant_count = 0
+
+    session.clear()
 
     for offset in range(0, 1000, 20):
     # print(f'Retrieving restaurants in {city}')
@@ -102,25 +104,47 @@ def citytest():
     new_zip_list = list(set(zip_code_list))
 
     # set lists filled by API results as session variables to call elsewhere
-    session['id_list'] = id_list
-    session['name_list'] = name_list
-    session['is_closed_list'] = is_closed_list
-    session['review_count_list'] = review_count_list
-    session['categories_list'] = categories_list
-    session['rating_list'] = rating_list
-    session['latitude_list'] = latitude_list
-    session['longitude_list'] = longitude_list
-    session['price_list'] = price_list
-    session['address_list'] = address_list
-    session['city_list'] = city_list
-    session['zip_code_list'] = zip_code_list
-    session['state_list'] = state_list
-    session['categories_all_list'] = categories_all_list
-    session['new_cat_list'] = new_cat_list
-    session['new_zip_list'] = new_zip_list
+    # session['id_list'] = id_list
+    # session['name_list'] = name_list
+    # session['is_closed_list'] = is_closed_list
+    # session['review_count_list'] = review_count_list
+    # session['categories_list'] = categories_list
+    # session['rating_list'] = rating_list
+    # session['latitude_list'] = latitude_list
+    # session['longitude_list'] = longitude_list
+    # session['price_list'] = price_list
+    # session['address_list'] = address_list
+    # session['city_list'] = city_list
+    # session['zip_code_list'] = zip_code_list
+    # session['state_list'] = state_list
+    # session['categories_all_list'] = categories_all_list
+    # session['new_cat_list'] = new_cat_list
+    # session['new_zip_list'] = new_zip_list
 
     # print API search time result
-    print (session['categories_list'])
+    # print (session['categories_list'])
+
+    restaurants_df = pd.DataFrame({
+    'ID': id_list,
+    'Name': name_list,
+    'Is_Closed': is_closed_list,
+    'Review_Count': review_count_list,
+    'Categories_All': categories_all_list,
+    'Categories': categories_list,
+    'Rating': rating_list,
+    'Latitude': latitude_list,
+    'Longitude': longitude_list,
+    'Price': price_list,
+    'Address': address_list,
+    'City': city_list,
+    'Zip_Code': zip_code_list,
+    'State': state_list
+    })
+
+    print(restaurants_df.head())
+
+    restaurants_df.to_csv('restaurants_df.csv', index=False)
+
     print("--- %s seconds ---" % (time.time() - start_time))
     print("Number of items in list: ", len(new_cat_list))
     
@@ -145,43 +169,50 @@ def useroptions():
     session['user_zipcode'] = user_zipcode
     session['user_price'] = user_price
 
+    restaurants_df = pd.read_csv('restaurants_df.csv')
+
+    # print(restaurants_df.head())
+
     # create dataframe based on user choices
-    restaurants_df = pd.DataFrame({
-        'ID': session['id_list'],
-        'Name': session['name_list'],
-        'Is_Closed': session['is_closed_list'],
-        'Review_Count': session['review_count_list'],
-        'Categories_All': session['categories_all_list'],
-        'Categories': session['categories_list'],
-        'Rating': session['rating_list'],
-        'Latitude': session['latitude_list'],
-        'Rating': session['rating_list'],
-        'Latitude': session['latitude_list'],
-        'Longitude': session['longitude_list'],
-        'Price': session['price_list'],
-        'Address': session['address_list'],
-        'City': session['city_list'],
-        'Zip_Code': session['zip_code_list'],
-        'State': session['state_list']
-        })
+    # restaurants_df = pd.DataFrame({
+    #     'ID': session.get('id_list'),
+    #     'Name': session.get('name_list'),
+    #     'Is_Closed': session.get('is_closed_list'),
+    #     'Review_Count': session.get('review_count_list'),
+    #     'Categories_All': session.get('categories_all_list'),
+    #     'Categories': session.get('categories_list'),
+    #     'Rating': session.get('rating_list'),
+    #     'Latitude': session.get('latitude_list'),
+    #     'Rating': session.get('rating_list'),
+    #     'Latitude': session.get('latitude_list'),
+    #     'Longitude': session.get('longitude_list'),
+    #     'Price': session.get('price_list'),
+    #     'Address': session.get('address_list'),
+    #     'City': session.get('city_list'),
+    #     'Zip_Code': session.get('zip_code_list'),
+    #     'State': session.get('state_list')
+    #     })
     
-    print(session['categories_list'])
+    # print(session.get('categories_list'))
 
     restaurants_df.drop_duplicates(keep = False, inplace = True)
     restaurants_df.dropna(subset = ['Address'], inplace = True)
     restaurants_df.dropna(subset = ['Price'], inplace = True)
     restaurants_df = restaurants_df[restaurants_df.Price != '']
-    restaurants_df['Price'].replace({'$$$$$': 5, '$$$$': 4, '$$$': 3, '$$': 2, '$': 1}, inplace = True)
+    restaurants_df = restaurants_df[restaurants_df.Zip_Code != '']
+    restaurants_df['Price'].replace({'$$$$': 4, '$$$': 3, '$$': 2, '$': 1}, inplace = True)
     restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
-    restaurants_df['Categories'].replace(['American (New)', 'American (Traditional)'], 'American', inplace = True)
-    restaurants_df['Categories'].replace(['New Mexican Cuisine'], 'Mexican', inplace = True)
 
-    cat_list_df= pd.DataFrame(columns=session['new_cat_list'])
+    cat_list = list(restaurants_df.Categories.unique())
+    cat_list.sort()
+
+    # cat_list_df= pd.DataFrame(columns=session.get('new_cat_list'))
+    cat_list_df = pd.DataFrame(columns=cat_list)
     cat_list_df['new_col'] = pd.Series()
 
     new_df = pd.merge(restaurants_df, cat_list_df, how='left', left_on = restaurants_df.ID, right_on = cat_list_df.new_col)
 
-    for i in session['new_cat_list']:
+    for i in cat_list:
         new_df.loc[(new_df.Categories.str.contains(i)==True), i] = 1
 
     new_df.drop(axis = 1, columns = ['Categories', 'key_0', 'new_col'], inplace = True)
@@ -189,6 +220,7 @@ def useroptions():
     new_df.fillna(0, inplace = True)
 
     modeling_df = new_df.drop(axis = 1, columns = ['ID', 'Name', 'Categories_All', 'Is_Closed', 'Latitude', 'Longitude', 'Address', 'City', 'State'])
+    modeling_df['Zip_Code'] = modeling_df['Zip_Code'].astype('object')
     modeling_df = pd.get_dummies(modeling_df)
 
     L = list(modeling_df.columns)
@@ -213,10 +245,13 @@ def useroptions():
     rf = rf.fit(X_train, y_train)
 
     user_df = X.drop(X.index)
+
+    user_df_col = list(user_df.columns)
+    user_df_col.pop(0)
+
     user_df['Price'] = [0]
-    user_df.fillna(0, inplace = True)
-    print('************** User columns:')
-    print(user_df.columns)
+
+    user_df = user_df.fillna(0).astype(np.int64)
 
     user_df.Price = user_price
 
@@ -227,9 +262,15 @@ def useroptions():
         cat_column = [col for col in user_df.columns if category == col]
         user_df[cat_column[0]] = 1
 
+    user_df[user_df_col] = user_df[user_df_col].astype('category')
+
+    print('************** User Data:')
+    print(user_df)
+
     # Prediction
     user_prediction = np.round(rf.predict(user_df) * 2) / 2
     user_prediction = user_prediction[0] #4
+    # user_prediction = 4
     
     # Prediction to display
     print(user_prediction)
