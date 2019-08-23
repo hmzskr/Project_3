@@ -53,10 +53,10 @@ d3.json(geojson_final, function (data) {
 	createFeatures(data);
 });
 
-function createFeatures(earthquakeData) {
+function createFeatures(restaurantData) {
 
 	// Define a function we want to run once for each feature in the features array
-	// Give each feature a popup describing the place and time of the earthquake
+	// Give each feature a popup describing the place of the restaurant
 	function onEachFeature(feature, layer) {
 		layer.bindPopup("<h3>" + feature.properties.ratings +
 			"</h3><hr><p>" + new Date(feature.properties.names) + "</p>");
@@ -65,7 +65,7 @@ function createFeatures(earthquakeData) {
 	for (var i = 0; i < geojson_final.length; i++) {
 		var restaurant = geojson_final[i];
 		L.marker(restaurant.geometry.coordinates)
-			.bindPopup("<h5>" + restaurant.properties.names + "</h5><hr><p>" + " " + "Address: " + restaurant.properties.address + ", " + restaurant.properties.city + ", " + restaurant.properties.zipCode + "<br>" + "Rating: " + restaurant.properties.ratings + "<br>" + "Price: " + restaurant.properties.price + "</p>")
+			.bindPopup("<h5>" + restaurant.properties.names + "</h5><hr><p>" + " " + "Address: " + restaurant.properties.address + ", " + restaurant.properties.city + ", " + restaurant.properties.zipCode + "<br>" + "Rating: " + restaurant.properties.ratings + "&#9733;<br>" + "Price: " + restaurant.properties.price + "</p>")
 			.addTo(myMap);
 	}
 }

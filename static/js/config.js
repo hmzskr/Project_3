@@ -1,1 +1,1 @@
-const API_KEY = "Leaflet API KEY";
+const API_KEY = "Leaflet Key";

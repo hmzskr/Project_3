@@ -33,121 +33,125 @@ def citytest():
 
     start_time = time.time()
 
-    ykey = "YELP API KEY"
+    if city == 'Los Angeles, CA':
+    	restaurants_df = pd.read_csv('la_restaurants.csv')
+    else:
 
-    yelp_url = 'https://api.yelp.com/v3/businesses/search'
-    yelp_headers = {'Authorization': 'Bearer %s' % ykey}
+	    ykey = "Ii7Pa9IZug_H12vEjc6Z8Q7PVKDIkFXZDYLKJR9xdtTWkgw75dqoWkhpaHQ__jFcmvrmytLdF3plPxFDfw6cJqe5ugr-HOUirTiSPMFI7aYZ1W9mvifY2AJY7Sk5XXYx"
 
-    # Columns of DataFrame
+	    yelp_url = 'https://api.yelp.com/v3/businesses/search'
+	    yelp_headers = {'Authorization': 'Bearer %s' % ykey}
 
-    id_list = []
-    name_list = []
-    is_closed_list = []
-    review_count_list = []
-    categories_list = []
-    rating_list = []
-    latitude_list = []
-    longitude_list = []
-    price_list = []
-    address_list = []
-    city_list = []
-    zip_code_list = []
-    state_list = []
-    categories_all_list = []
+	    # Columns of DataFrame
 
-    restaurant_count = 0
+	    id_list = []
+	    name_list = []
+	    is_closed_list = []
+	    review_count_list = []
+	    categories_list = []
+	    rating_list = []
+	    latitude_list = []
+	    longitude_list = []
+	    price_list = []
+	    address_list = []
+	    city_list = []
+	    zip_code_list = []
+	    state_list = []
+	    categories_all_list = []
 
-    session.clear()
+	    restaurant_count = 0
 
-    for offset in range(0, 1000, 20):
-    # print(f'Retrieving restaurants in {city}')
-        yelp_params = {'location': city, 'term': 'restaurants', 'limit': '20', 'offset': offset}
-        yelp_response = requests.get(yelp_url, yelp_params, headers = yelp_headers)
-        yelp_data = yelp_response.json()
-    # print(yelp_data)
-        restaurant_data = yelp_data['businesses']
+	    session.clear()
 
-        for restaurant in restaurant_data:
-            categories_all_list_sub = []
-            for category in restaurant['categories']: 
-                categories_all_list_sub.append(category['title'])
-            
-            for category in restaurant['categories']: 
-                id_list.append(restaurant['id'])         
-                name_list.append(restaurant['name'])
-                is_closed_list.append(restaurant['is_closed'])
-                review_count_list.append(restaurant['review_count'])
-                categories_list.append(category['title'])
-                rating_list.append(restaurant['rating'])
-                latitude_list.append(restaurant['coordinates']['latitude'])
-                longitude_list.append(restaurant['coordinates']['longitude'])
-                address_list.append(restaurant['location']['address1'])
-                city_list.append(restaurant['location']['city'])
-                zip_code_list.append(restaurant['location']['zip_code'])
-                state_list.append(restaurant['location']['state'])
-                
-                categories_all_list.append(', '.join(categories_all_list_sub))
+	    for offset in range(0, 1000, 20):
+	    # print(f'Retrieving restaurants in {city}')
+	        yelp_params = {'location': city, 'term': 'restaurants', 'limit': '20', 'offset': offset}
+	        yelp_response = requests.get(yelp_url, yelp_params, headers = yelp_headers)
+	        yelp_data = yelp_response.json()
+	    # print(yelp_data)
+	        restaurant_data = yelp_data['businesses']
 
-                try:                
-                    price_list.append(restaurant['price'])
+	        for restaurant in restaurant_data:
+	            categories_all_list_sub = []
+	            for category in restaurant['categories']: 
+	                categories_all_list_sub.append(category['title'])
+	            
+	            for category in restaurant['categories']: 
+	                id_list.append(restaurant['id'])         
+	                name_list.append(restaurant['name'])
+	                is_closed_list.append(restaurant['is_closed'])
+	                review_count_list.append(restaurant['review_count'])
+	                categories_list.append(category['title'])
+	                rating_list.append(restaurant['rating'])
+	                latitude_list.append(restaurant['coordinates']['latitude'])
+	                longitude_list.append(restaurant['coordinates']['longitude'])
+	                address_list.append(restaurant['location']['address1'])
+	                city_list.append(restaurant['location']['city'])
+	                zip_code_list.append(restaurant['location']['zip_code'])
+	                state_list.append(restaurant['location']['state'])
+	                
+	                categories_all_list.append(', '.join(categories_all_list_sub))
 
-                except:
-                    price_list.append('')
+	                try:                
+	                    price_list.append(restaurant['price'])
 
-            restaurant_count += 1
-            print(f'Restaurant #{restaurant_count} data retrieved.')
-            
-    # # cast category & zip code lists to sets to remove duplicates for html rendering             
-    # new_cat_list = list(set(categories_list))
-    # new_zip_list = list(set(zip_code_list))
+	                except:
+	                    price_list.append('')
 
-    # set lists filled by API results as session variables to call elsewhere
-    # session['id_list'] = id_list
-    # session['name_list'] = name_list
-    # session['is_closed_list'] = is_closed_list
-    # session['review_count_list'] = review_count_list
-    # session['categories_list'] = categories_list
-    # session['rating_list'] = rating_list
-    # session['latitude_list'] = latitude_list
-    # session['longitude_list'] = longitude_list
-    # session['price_list'] = price_list
-    # session['address_list'] = address_list
-    # session['city_list'] = city_list
-    # session['zip_code_list'] = zip_code_list
-    # session['state_list'] = state_list
-    # session['categories_all_list'] = categories_all_list
-    # session['new_cat_list'] = new_cat_list
-    # session['new_zip_list'] = new_zip_list
+	            restaurant_count += 1
+	            print(f'Restaurant #{restaurant_count} data retrieved.')
+	            
+	    # # cast category & zip code lists to sets to remove duplicates for html rendering             
+	    # new_cat_list = list(set(categories_list))
+	    # new_zip_list = list(set(zip_code_list))
 
-    # print API search time result
-    # print (session['categories_list'])
+	    # set lists filled by API results as session variables to call elsewhere
+	    # session['id_list'] = id_list
+	    # session['name_list'] = name_list
+	    # session['is_closed_list'] = is_closed_list
+	    # session['review_count_list'] = review_count_list
+	    # session['categories_list'] = categories_list
+	    # session['rating_list'] = rating_list
+	    # session['latitude_list'] = latitude_list
+	    # session['longitude_list'] = longitude_list
+	    # session['price_list'] = price_list
+	    # session['address_list'] = address_list
+	    # session['city_list'] = city_list
+	    # session['zip_code_list'] = zip_code_list
+	    # session['state_list'] = state_list
+	    # session['categories_all_list'] = categories_all_list
+	    # session['new_cat_list'] = new_cat_list
+	    # session['new_zip_list'] = new_zip_list
 
-    restaurants_df = pd.DataFrame({
-    'ID': id_list,
-    'Name': name_list,
-    'Is_Closed': is_closed_list,
-    'Review_Count': review_count_list,
-    'Categories_All': categories_all_list,
-    'Categories': categories_list,
-    'Rating': rating_list,
-    'Latitude': latitude_list,
-    'Longitude': longitude_list,
-    'Price': price_list,
-    'Address': address_list,
-    'City': city_list,
-    'Zip_Code': zip_code_list,
-    'State': state_list
-    })
+	    # print API search time result
+	    # print (session['categories_list'])
 
-    # print(restaurants_df.head())
+	    restaurants_df = pd.DataFrame({
+	    'ID': id_list,
+	    'Name': name_list,
+	    'Is_Closed': is_closed_list,
+	    'Review_Count': review_count_list,
+	    'Categories_All': categories_all_list,
+	    'Categories': categories_list,
+	    'Rating': rating_list,
+	    'Latitude': latitude_list,
+	    'Longitude': longitude_list,
+	    'Price': price_list,
+	    'Address': address_list,
+	    'City': city_list,
+	    'Zip_Code': zip_code_list,
+	    'State': state_list
+	    })
 
-    restaurants_df.drop_duplicates(keep = False, inplace = True)
-    restaurants_df.dropna(subset = ['Address'], inplace = True)
-    restaurants_df.dropna(subset = ['Price'], inplace = True)
-    restaurants_df = restaurants_df[restaurants_df.Price != '']
-    restaurants_df = restaurants_df[restaurants_df.Zip_Code != '']
-    restaurants_df['Price'].replace({'$$$$': 4, '$$$': 3, '$$': 2, '$': 1}, inplace = True)
-    restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
+	    # print(restaurants_df.head())
+
+	    restaurants_df.drop_duplicates(keep = False, inplace = True)
+	    restaurants_df.dropna(subset = ['Address'], inplace = True)
+	    restaurants_df.dropna(subset = ['Price'], inplace = True)
+	    restaurants_df = restaurants_df[restaurants_df.Price != '']
+	    restaurants_df = restaurants_df[restaurants_df.Zip_Code != '']
+	    restaurants_df['Price'].replace({'$$$$': 4, '$$$': 3, '$$': 2, '$': 1}, inplace = True)
+	    restaurants_df['Price'] = pd.to_numeric(restaurants_df['Price'])
 
     restaurants_df.to_csv('restaurants_df.csv', index=False)
 
@@ -292,9 +296,14 @@ def useroptions():
     map_df = restaurants_df[restaurants_df.Is_Closed == False].drop(axis = 1, columns = ['ID', 'Is_Closed', 'Categories'])
     map_df.drop_duplicates(inplace = True)
 
-    map_df = map_df[(map_df.Zip_Code == int(user_zipcode)) & (map_df.Categories_All.str.contains('|'.join(user_categories)))]
-    map_df['Price'].replace({4 : '$$$$', 3: '$$$', 2 : '$$', 1 : '$'}, inplace = True)
-    map_df.to_csv('map_info.csv')
+    map_filtered_df = map_df[(map_df.Zip_Code == int(user_zipcode)) & (map_df.Categories_All.str.contains('|'.join(user_categories)))]
+
+    if map_filtered_df.shape[0] == 0:
+    	map_filtered_df = map_df[(map_df.Categories_All.str.contains('|'.join(user_categories)))]
+
+    map_filtered_df['Price'].replace({4 : '$$$$', 3: '$$$', 2 : '$$', 1 : '$'}, inplace = True)    	
+
+    map_filtered_df.to_csv('map_info.csv')
 
     # print(map_df_display)
     
