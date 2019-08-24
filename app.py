@@ -37,7 +37,7 @@ def citytest():
     	restaurants_df = pd.read_csv('la_restaurants.csv')
     else:
 
-	    ykey = "Ii7Pa9IZug_H12vEjc6Z8Q7PVKDIkFXZDYLKJR9xdtTWkgw75dqoWkhpaHQ__jFcmvrmytLdF3plPxFDfw6cJqe5ugr-HOUirTiSPMFI7aYZ1W9mvifY2AJY7Sk5XXYx"
+	    ykey = "YELP API KEY"
 
 	    yelp_url = 'https://api.yelp.com/v3/businesses/search'
 	    yelp_headers = {'Authorization': 'Bearer %s' % ykey}
