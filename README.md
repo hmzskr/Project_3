@@ -13,3 +13,5 @@
 4. Split data into train and test datasets and fit it using RandomForest.
 5. Verify accuracy of model and review predictions.
 6. Filter mapping dataset to find similar restaurants (potential competitors) in the area.
+
+- - -
