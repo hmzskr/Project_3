@@ -1,5 +1,7 @@
 # Yelp API | Machine Learning Prediction
 
+![Screenshot](screenshots/app_final.png)
+
 - Goal: Predict Success of a restaurant based on category, area, and price.
 - Assumption: Yelp Rating is the measure of success of restaurant.
 - Technologies: Python Pandas - HTML/CSS/Bootstrap - JavaScript - Leaflet.js
